@@ -6,8 +6,8 @@ export function wrapText (textarea, openTag, closeTag) {
 
   insertText(textarea, replacement, start, end)
 
-  textarea.selectionEnd = end + openTag.length
   textarea.selectionStart = start + openTag.length
+  textarea.selectionEnd = end + openTag.length
 }
 
 export function insertText (textarea, text, start, end) {
