@@ -3,7 +3,7 @@ import jsdom from 'mocha-jsdom'
 import sinon from 'sinon'
 import widgets from 'widjet'
 
-import {inputEvent} from './helpers/events'
+import {click, inputEvent} from './helpers/events'
 
 import '../src/index'
 
@@ -41,6 +41,22 @@ describe('text-editor', () => {
         (line) => line.match(/^\d\. /),
         (line) => `${parseInt(line.match(/^\d/)[0], 10) + 1}. `
       ]
+    })
+  })
+
+  describe('clicking on an action button', () => {
+    beforeEach(() => {
+      const button = document.querySelector('[data-wrap="**|**"]')
+      click(button)
+    })
+
+    it('inserts the corresponding text', () => {
+      expect(textarea.value).to.eql('****')
+    })
+
+    it('places the cursor at the position of the | in the data-wrap value', () => {
+      expect(textarea.selectionEnd).to.eql(2)
+      expect(textarea.selectionStart).to.eql(2)
     })
   })
 
