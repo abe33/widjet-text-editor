@@ -18,7 +18,7 @@ describe('text-editor', () => {
         <button data-wrap='**|**'
                 data-keystroke='ctrl-b'></button>
 
-        <button data-wrap='[|]($url)'
+        <button data-wrap='[|]($url "$title")'
                 data-keystroke='ctrl-u'></button>
 
         <button data-wrap='- |'
@@ -100,7 +100,7 @@ describe('text-editor', () => {
 
       describe('when the wrap pattern contains a token', () => {
         beforeEach(() => {
-          sinon.stub(window, 'prompt').returns('/path')
+          sinon.stub(window, 'prompt').returns('foo')
 
           textarea.value = 'some text content'
           textarea.selectionStart = 5
@@ -112,7 +112,7 @@ describe('text-editor', () => {
         it('prompts the user for input and uses the provided value', () => {
           expect(window.prompt.called).to.be.ok()
 
-          expect(textarea.value).to.eql('some [text](/path) content')
+          expect(textarea.value).to.eql('some [text](foo "foo") content')
         })
       })
     })
