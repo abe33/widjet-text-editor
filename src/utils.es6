@@ -1,19 +1,19 @@
-export function wrapSelection (textarea, openTag, closeTag) {
-  const start = textarea.selectionStart
-  const end = textarea.selectionEnd
-  const selectedText = textarea.value.substring(start, end)
-  const replacement = openTag + selectedText + closeTag
-
-  insertText(textarea, replacement, start, end)
-
-  textarea.selectionStart = start + openTag.length
-  textarea.selectionEnd = end + openTag.length
-}
-
-export function insertText (textarea, text, start, end) {
+export function insertText (textarea, start, end, text) {
   textarea.value = textarea.value.substring(0, start) +
                    text +
                    textarea.value.substring(end, textarea.value.length)
+}
+
+export function wrapSelection (textarea, prefix, suffix) {
+  const start = textarea.selectionStart
+  const end = textarea.selectionEnd
+  const selectedText = textarea.value.substring(start, end)
+  const replacement = prefix + selectedText + suffix
+
+  insertText(textarea, start, end, replacement)
+
+  textarea.selectionStart = start + prefix.length
+  textarea.selectionEnd = end + prefix.length
 }
 
 export function collectMatches (string, regex) {
@@ -76,6 +76,5 @@ export default {
   lineEndIndexAtCursor,
   patchLines,
   scanLines,
-  wholeLinesAtCursor,
-  wrapSelection
+  wholeLinesAtCursor
 }

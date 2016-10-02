@@ -53,7 +53,7 @@ widgets.define('text-editor', (options) => {
         textarea.focus()
 
         if (options[wrap]) {
-          options[wrap](textarea, utils)
+          insertText(textarea, ...options[wrap](textarea, utils))
         } else {
           defaultWrap(textarea, wrap)
         }
@@ -110,7 +110,7 @@ function checkLineRepeater (event, textarea, repeater) {
     event.preventDefault()
     const start = textarea.selectionStart
     const end = textarea.selectionEnd
-    insertText(textarea, `\n${next}`, start, end)
+    insertText(textarea, start, end, `\n${next}`)
     textarea.selectionEnd = end + next.length + 1
     widgets.dispatch(textarea, 'input')
     widgets.dispatch(textarea, 'change')

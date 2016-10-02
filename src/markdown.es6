@@ -5,14 +5,14 @@ export default {
     const [start, end, string] = wholeLinesAtCursor(textarea)
     const newSelection = patchLines(string, line => `> ${line}`)
 
-    insertText(textarea, newSelection, start, end)
+    return [start, end, newSelection]
   },
 
   codeBlock: (textarea) => {
     const [start, end, string] = wholeLinesAtCursor(textarea)
     const newSelection = patchLines(string, line => `    ${line}`)
 
-    insertText(textarea, newSelection, start, end)
+    return [start, end, newSelection]
   },
 
   orderedList: (textarea) => {
@@ -21,7 +21,7 @@ export default {
       i === 0 ? `1. ${line}` : `  ${line}`
     )
 
-    insertText(textarea, newSelection, start, end)
+    return [start, end, newSelection]
   },
 
   unorderedList: (textarea) => {
@@ -30,7 +30,7 @@ export default {
       i === 0 ? `- ${line}` : `  ${line}`
     )
 
-    insertText(textarea, newSelection, start, end)
+    return [start, end, newSelection]
   },
 
   // Repeaters
