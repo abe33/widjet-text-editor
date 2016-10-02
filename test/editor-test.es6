@@ -6,7 +6,7 @@ import widgets from 'widjet'
 import {click, inputEvent} from './helpers/events'
 import {waitsFor} from './helpers/utils'
 
-import '../src/index'
+import {Markdown} from '../src/index'
 
 describe('text-editor', () => {
   jsdom()
@@ -25,15 +25,16 @@ describe('text-editor', () => {
         <button data-wrap='\\||\\|'
                 data-keystroke='ctrl-r'></button>
 
-        <button data-wrap='wrapCode'></button>
+        <button data-wrap='codeBlock'></button>
+        <button data-wrap='quote'></button>
 
-        <button data-wrap='- |'
+        <button data-wrap='unorderedList'
                 data-keystroke='ctrl-u'
                 data-next-line-repeater='- '></button>
 
-        <button data-wrap='1. |'
+        <button data-wrap='orderedList'
                 data-keystroke='ctrl-o'
-                data-next-line-repeater='orderedList'></button>
+                data-next-line-repeater='repeatOrderedList'></button>
 
         <textarea></textarea>
       </div>
@@ -43,18 +44,11 @@ describe('text-editor', () => {
 
     widgets('text-editor', '.text-editor', {
       on: 'init',
-      orderedList: [
-        (line) => line.match(/^\d\. /),
-        (line) => `${parseInt(line.match(/^\d/)[0], 10) + 1}. `
-      ],
-      wrapCode: (textarea, api) => {
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-
-        const newSelection = textarea.value.substring(start, end).split('\n').map(s => `    ${s}`).join('\n')
-
-        api.insertText(textarea, newSelection, start, end)
-      }
+      repeatOrderedList: Markdown.repeatOrderedList,
+      unorderedList: Markdown.unorderedList,
+      orderedList: Markdown.orderedList,
+      codeBlock: Markdown.codeBlock,
+      quote: Markdown.quote
     })
   })
 
@@ -76,15 +70,15 @@ describe('text-editor', () => {
     describe('that have a drap-wrap attribute that refer to a function in the options', () => {
       beforeEach(() => {
         textarea.value = 'some text content\nsome text content\nsome text content'
-        textarea.selectionStart = 0
-        textarea.selectionEnd = textarea.value.length
+        textarea.selectionStart = 5
+        textarea.selectionEnd = 27
 
-        const button = document.querySelector('[data-wrap="wrapCode"]')
+        const button = document.querySelector('[data-wrap="codeBlock"]')
         click(button)
       })
 
       it('inserts the corresponding text', () => {
-        expect(textarea.value).to.eql('    some text content\n    some text content\n    some text content')
+        expect(textarea.value).to.eql('    some text content\n    some text content\nsome text content')
       })
     })
   })
@@ -200,6 +194,53 @@ describe('text-editor', () => {
         it('does not insert anything', () => {
           expect(textarea.value).to.eql('\nsome text content')
         })
+      })
+    })
+  })
+
+  describe('markdown helpers', () => {
+    describe('quotes', () => {
+      beforeEach(() => {
+        textarea.value = 'some text content\nsome text content\nsome text content'
+        textarea.selectionStart = 5
+        textarea.selectionEnd = 27
+
+        const button = document.querySelector('[data-wrap="quote"]')
+        click(button)
+      })
+
+      it('inserts a > on each of the selection', () => {
+        expect(textarea.value).to.eql('> some text content\n> some text content\nsome text content')
+      })
+    })
+
+    describe('unorderedList', () => {
+      beforeEach(() => {
+        textarea.value = 'some text content\nsome text content\nsome text content'
+        textarea.selectionStart = 5
+        textarea.selectionEnd = 27
+
+        const button = document.querySelector('[data-wrap="unorderedList"]')
+        click(button)
+      })
+
+      it('inserts a - on the first line of the selection', () => {
+        expect(textarea.value).to.eql('- some text content\n  some text content\nsome text content')
+      })
+    })
+
+    describe('orderedList', () => {
+      beforeEach(() => {
+        textarea.value = 'some text content\nsome text content\nsome text content'
+        textarea.selectionStart = 5
+        textarea.selectionEnd = 27
+
+        const button = document.querySelector('[data-wrap="orderedList"]')
+        click(button)
+      })
+
+      it('inserts a 1. on the first line of the selection', () => {
+        expect(textarea.value).to.eql('1. some text content\n  some text content\nsome text content')
       })
     })
   })

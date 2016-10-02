@@ -1,8 +1,11 @@
 import widgets from 'widjet'
 import {asArray, when} from 'widjet-utils'
 
-import {collectMatches, wrapText, lineAtCursor, insertText, scanLines} from './utils'
+import {collectMatches, wrapText, lineAtCursor, insertText} from './utils'
 import KeyStroke from './key-stroke'
+import Markdown from './markdown'
+
+export {Markdown, KeyStroke}
 
 const escapeRegExp = (s) => s.replace(/[$^\[\]().+?*]/g, '\\$1')
 
@@ -49,9 +52,7 @@ widgets.define('text-editor', (options) => {
         textarea.focus()
 
         if (options[wrap]) {
-          options[wrap](textarea, {
-            wrapText, lineAtCursor, insertText, scanLines
-          })
+          options[wrap](textarea)
         } else {
           defaultWrap(textarea, wrap)
         }

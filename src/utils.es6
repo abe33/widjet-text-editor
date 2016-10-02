@@ -48,3 +48,25 @@ export const lineAtCursor = scanLines(({textarea, line, charIndex}) => {
     return line
   }
 })
+
+export const lineStartIndexAtCursor = scanLines(({textarea, line, charIndex}) => {
+  const start = textarea.selectionStart
+  if (start > charIndex && start <= charIndex + line.length) {
+    return charIndex
+  }
+})
+
+export const lineEndIndexAtCursor = scanLines(({textarea, line, charIndex}) => {
+  const start = textarea.selectionStart
+  if (start > charIndex && start <= charIndex + line.length) {
+    return charIndex + line.length - 1
+  }
+})
+
+export const wholeLinesAtCursor = (textarea) => {
+  const s = Math.min(lineStartIndexAtCursor(textarea), textarea.selectionStart)
+  const e = Math.max(lineEndIndexAtCursor(textarea), textarea.selectionEnd)
+  return [s, e, textarea.value.substring(s, e)]
+}
+
+export const patchLines = (str, block) => str.split('\n').map(block).join('\n')
