@@ -1,4 +1,4 @@
-export function wrapText (textarea, openTag, closeTag) {
+export function wrapSelection (textarea, openTag, closeTag) {
   const start = textarea.selectionStart
   const end = textarea.selectionEnd
   const selectedText = textarea.value.substring(start, end)
@@ -77,5 +77,5 @@ export default {
   patchLines,
   scanLines,
   wholeLinesAtCursor,
-  wrapText
+  wrapSelection
 }

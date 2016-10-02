@@ -1,7 +1,7 @@
 import widgets from 'widjet'
 import {asArray, when} from 'widjet-utils'
 
-import {collectMatches, wrapText, lineAtCursor, insertText} from './utils'
+import {collectMatches, wrapSelection, lineAtCursor, insertText} from './utils'
 import utils from './utils'
 import KeyStroke from './key-stroke'
 import Markdown from './markdown'
@@ -94,10 +94,10 @@ widgets.define('text-editor', (options) => {
           newEnd = newEnd.replace(re, value)
         })
 
-        wrapText(textarea, newStart, newEnd)
+        wrapSelection(textarea, newStart, newEnd)
       })
     } else {
-      wrapText(textarea, start, end)
+      wrapSelection(textarea, start, end)
     }
   }
 })
