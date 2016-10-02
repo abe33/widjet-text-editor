@@ -2,7 +2,7 @@ import {insertText, wholeLinesAtCursor, patchLines} from './utils'
 
 export default {
 
-  quote: (textarea) => {
+  blockquote: (textarea) => {
     const [start, end, string] = wholeLinesAtCursor(textarea)
     const newSelection = patchLines(string, line => `> ${line}`)
 

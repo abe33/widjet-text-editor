@@ -26,7 +26,7 @@ describe('text-editor', () => {
                 data-keystroke='ctrl-r'></button>
 
         <button data-wrap='codeBlock'></button>
-        <button data-wrap='quote'></button>
+        <button data-wrap='blockquote'></button>
 
         <button data-wrap='unorderedList'
                 data-keystroke='ctrl-u'
@@ -48,7 +48,7 @@ describe('text-editor', () => {
       unorderedList: Markdown.unorderedList,
       orderedList: Markdown.orderedList,
       codeBlock: Markdown.codeBlock,
-      quote: Markdown.quote
+      blockquote: Markdown.blockquote
     })
   })
 
@@ -199,7 +199,7 @@ describe('text-editor', () => {
   })
 
   describe('markdown helpers', () => {
-    describe('quotes', () => {
+    describe('blockquote', () => {
       beforeEach(() => {
         textarea.value = 'some text content\nsome text content\nsome text content'
         textarea.selectionStart = 5
