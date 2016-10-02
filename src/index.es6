@@ -2,6 +2,7 @@ import widgets from 'widjet'
 import {asArray, when} from 'widjet-utils'
 
 import {collectMatches, wrapText, lineAtCursor, insertText} from './utils'
+import utils from './utils'
 import KeyStroke from './key-stroke'
 import Markdown from './markdown'
 
@@ -52,7 +53,7 @@ widgets.define('text-editor', (options) => {
         textarea.focus()
 
         if (options[wrap]) {
-          options[wrap](textarea)
+          options[wrap](textarea, utils)
         } else {
           defaultWrap(textarea, wrap)
         }

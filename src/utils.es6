@@ -70,3 +70,12 @@ export const wholeLinesAtCursor = (textarea) => {
 }
 
 export const patchLines = (str, block) => str.split('\n').map(block).join('\n')
+
+export default {
+  lineAtCursor,
+  lineEndIndexAtCursor,
+  patchLines,
+  scanLines,
+  wholeLinesAtCursor,
+  wrapText
+}
