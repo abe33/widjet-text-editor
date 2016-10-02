@@ -4,6 +4,7 @@ import sinon from 'sinon'
 import widgets from 'widjet'
 
 import {click, inputEvent} from './helpers/events'
+import {waitsFor} from './helpers/utils'
 
 import '../src/index'
 
@@ -107,11 +108,11 @@ describe('text-editor', () => {
           textarea.selectionEnd = 9
 
           textarea.dispatchEvent(inputEvent('keydown', {ctrlKey: true, key: 'u'}))
+
+          return waitsFor('user prompted', () => window.prompt.called)
         })
 
         it('prompts the user for input and uses the provided value', () => {
-          expect(window.prompt.called).to.be.ok()
-
           expect(textarea.value).to.eql('some [text](foo "foo") content')
         })
       })

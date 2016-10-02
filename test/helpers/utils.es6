@@ -1,6 +1,18 @@
-export const map = (o, fn) => Object.keys(o).map(k => fn(k, o[k]))
+export function waitsFor (m, f, t, i) {
+  const intervalTime = i || 10
 
-export const asDataAttrs = (o) =>
-  map(o, (k, v) => typeof v === 'boolean' ? (v ? k : '') : `${k}="${v}"`)
-  .map(s => `data-${s}`)
-  .join(' ')
+  return new Promise((resolve, reject) => {
+    const interval = setInterval(() => {
+      if (f()) {
+        clearTimeout(timeout)
+        clearInterval(interval)
+        resolve()
+      }
+    }, intervalTime)
+
+    const timeout = setTimeout(() => {
+      clearInterval(interval)
+      reject(new Error('Waits for condition never met: ' + f.toString()))
+    }, t || 2000)
+  })
+}
