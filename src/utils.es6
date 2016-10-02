@@ -73,6 +73,7 @@ export const patchLines = (str, block) => str.split('\n').map(block).join('\n')
 
 export default {
   lineAtCursor,
+  lineStartIndexAtCursor,
   lineEndIndexAtCursor,
   patchLines,
   scanLines,
