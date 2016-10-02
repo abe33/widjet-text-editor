@@ -11,7 +11,9 @@ export function wrapText (textarea, openTag, closeTag) {
 }
 
 export function insertText (textarea, text, start, end) {
-  textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end, textarea.value.length)
+  textarea.value = textarea.value.substring(0, start) +
+                   text +
+                   textarea.value.substring(end, textarea.value.length)
 }
 
 export function collectMatches (string, regex) {

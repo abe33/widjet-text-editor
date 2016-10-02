@@ -1,7 +1,7 @@
 import widgets from 'widjet'
 import {asArray, when} from 'widjet-utils'
 
-import {collectMatches, wrapText, lineAtCursor, insertText} from './utils'
+import {collectMatches, wrapText, lineAtCursor, insertText, scanLines} from './utils'
 import KeyStroke from './key-stroke'
 
 const escapeRegExp = (s) => s.replace(/[$^\[\]().+?*]/g, '\\$1')
@@ -40,8 +40,6 @@ widgets.define('text-editor', (options) => {
 
     wrapButtons.forEach((button) => {
       const wrap = button.getAttribute('data-wrap')
-      const [start, end] = wrap.split('|')
-      const tokens = collectMatches(wrap, /\$\w+/g)
 
       if (button.hasAttribute('data-keystroke')) {
         keystrokes.push(KeyStroke.parse(button.getAttribute('data-keystroke'), button))
@@ -50,22 +48,14 @@ widgets.define('text-editor', (options) => {
       button.addEventListener('click', (e) => {
         textarea.focus()
 
-        if (tokens.length) {
-          let newStart = start
-          let newEnd = end
-
-          collectTokens(tokens).then((results) => {
-            eachPair(results, (token, value) => {
-              const re = new RegExp(token.replace('$', '\\$'), 'g')
-              newStart = newStart.replace(re, value)
-              newEnd = newEnd.replace(re, value)
-            })
-
-            wrapText(textarea, newStart, newEnd)
+        if (options[wrap]) {
+          options[wrap](textarea, {
+            wrapText, lineAtCursor, insertText, scanLines
           })
         } else {
-          wrapText(textarea, start, end)
+          defaultWrap(textarea, wrap)
         }
+
         widgets.dispatch(textarea, 'input')
         widgets.dispatch(textarea, 'change')
       })
@@ -84,6 +74,28 @@ widgets.define('text-editor', (options) => {
           checkLineContinuation(e, textarea, continuation)
         }
       })
+    }
+  }
+
+  function defaultWrap (textarea, wrap) {
+    const [start, end] = wrap.split('|')
+    const tokens = collectMatches(wrap, /\$\w+/g)
+
+    if (tokens.length) {
+      let newStart = start
+      let newEnd = end
+
+      collectTokens(tokens).then((results) => {
+        eachPair(results, (token, value) => {
+          const re = new RegExp(token.replace('$', '\\$'), 'g')
+          newStart = newStart.replace(re, value)
+          newEnd = newEnd.replace(re, value)
+        })
+
+        wrapText(textarea, newStart, newEnd)
+      })
+    } else {
+      wrapText(textarea, start, end)
     }
   }
 })

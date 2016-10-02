@@ -22,6 +22,8 @@ describe('text-editor', () => {
         <button data-wrap='[|]($url "$title")'
                 data-keystroke='ctrl-u'></button>
 
+        <button data-wrap='wrapCode'></button>
+
         <button data-wrap='- |'
                 data-keystroke='ctrl-u'
                 data-next-line-continuation='- '></button>
@@ -41,7 +43,15 @@ describe('text-editor', () => {
       orderedList: [
         (line) => line.match(/^\d\. /),
         (line) => `${parseInt(line.match(/^\d/)[0], 10) + 1}. `
-      ]
+      ],
+      wrapCode: (textarea, api) => {
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+
+        const newSelection = textarea.value.substring(start, end).split('\n').map(s => `    ${s}`).join('\n')
+
+        api.insertText(textarea, newSelection, start, end)
+      }
     })
   })
 
@@ -58,6 +68,21 @@ describe('text-editor', () => {
     it('places the cursor at the position of the | in the data-wrap value', () => {
       expect(textarea.selectionEnd).to.eql(2)
       expect(textarea.selectionStart).to.eql(2)
+    })
+
+    describe('that have a drap-wrap attribute that refer to a function in the options', () => {
+      beforeEach(() => {
+        textarea.value = 'some text content\nsome text content\nsome text content'
+        textarea.selectionStart = 0
+        textarea.selectionEnd = textarea.value.length
+
+        const button = document.querySelector('[data-wrap="wrapCode"]')
+        click(button)
+      })
+
+      it('inserts the corresponding text', () => {
+        expect(textarea.value).to.eql('    some text content\n    some text content\n    some text content')
+      })
     })
   })
 
