@@ -78,7 +78,7 @@ widgets.define('text-editor', (options) => {
   }
 
   function defaultWrap (textarea, wrap) {
-    const [start, end] = wrap.split('|')
+    const [start, end] = wrap.replace(/\\\|/g, '[__PIPE__]').split('|').map(s => s.replace(/\[__PIPE__\]/g, '|'))
     const tokens = collectMatches(wrap, /\$\w+/g)
 
     if (tokens.length) {

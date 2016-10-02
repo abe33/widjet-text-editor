@@ -22,6 +22,9 @@ describe('text-editor', () => {
         <button data-wrap='[|]($url "$title")'
                 data-keystroke='ctrl-u'></button>
 
+        <button data-wrap='\\||\\|'
+                data-keystroke='ctrl-r'></button>
+
         <button data-wrap='wrapCode'></button>
 
         <button data-wrap='- |'
@@ -139,6 +142,20 @@ describe('text-editor', () => {
 
         it('prompts the user for input and uses the provided value', () => {
           expect(textarea.value).to.eql('some [text](foo "foo") content')
+        })
+      })
+
+      describe('when the wrap pattern contains an escaped pipe', () => {
+        beforeEach(() => {
+          textarea.value = 'some text content'
+          textarea.selectionStart = 5
+          textarea.selectionEnd = 9
+
+          textarea.dispatchEvent(inputEvent('keydown', {ctrlKey: true, key: 'r'}))
+        })
+
+        it('inserts pipes properly', () => {
+          expect(textarea.value).to.eql('some |text| content')
         })
       })
     })
