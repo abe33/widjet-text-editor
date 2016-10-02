@@ -15,10 +15,19 @@ describe('text-editor', () => {
   beforeEach(() => {
     document.body.innerHTML = `
       <div class='text-editor'>
-        <button data-wrap='**|**' data-key='ctrl-b'></button>
-        <button data-wrap='[|]($url)' data-key='ctrl-u'></button>
-        <button data-wrap='- |' data-key='ctrl-u' data-next-line-continuation='- '></button>
-        <button data-wrap='1. |' data-key='ctrl-o' data-next-line-continuation='orderedList'></button>
+        <button data-wrap='**|**'
+                data-keystroke='ctrl-b'></button>
+
+        <button data-wrap='[|]($url)'
+                data-keystroke='ctrl-u'></button>
+
+        <button data-wrap='- |'
+                data-keystroke='ctrl-u'
+                data-next-line-continuation='- '></button>
+
+        <button data-wrap='1. |'
+                data-keystroke='ctrl-o'
+                data-next-line-continuation='orderedList'></button>
 
         <textarea></textarea>
       </div>

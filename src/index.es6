@@ -31,8 +31,8 @@ widgets.define('text-editor', (options) => (el) => {
     const [start, end] = wrap.split('|')
     const tokens = collectMatches(wrap, /\$\w+/g)
 
-    if (button.hasAttribute('data-key')) {
-      keystrokes.push(KeyStroke.parse(button.getAttribute('data-key'), button))
+    if (button.hasAttribute('data-keystroke')) {
+      keystrokes.push(KeyStroke.parse(button.getAttribute('data-keystroke'), button))
     }
 
     button.addEventListener('click', (e) => {
