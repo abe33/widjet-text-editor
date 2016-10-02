@@ -205,7 +205,7 @@ describe('text-editor', () => {
         textarea.selectionStart = 5
         textarea.selectionEnd = 27
 
-        const button = document.querySelector('[data-wrap="quote"]')
+        const button = document.querySelector('[data-wrap="blockquote"]')
         click(button)
       })
 
