@@ -1,4 +1,4 @@
-import {insertText, wholeLinesAtCursor, patchLines} from './utils'
+import {wholeLinesAtCursor, patchLines} from './utils'
 
 export default {
   blockquote: (textarea) => {
