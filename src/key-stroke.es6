@@ -9,7 +9,7 @@ export default class KeyStroke {
       meta: false
     }
 
-    strokes.forEach((stroke) => modifiers[stroke] = true)
+    strokes.forEach((stroke) => modifiers[stroke.toLowerCase()] = true)
 
     return new KeyStroke(key, modifiers, button)
   }
