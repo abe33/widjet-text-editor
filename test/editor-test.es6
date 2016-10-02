@@ -26,11 +26,11 @@ describe('text-editor', () => {
 
         <button data-wrap='- |'
                 data-keystroke='ctrl-u'
-                data-next-line-continuation='- '></button>
+                data-next-line-repeater='- '></button>
 
         <button data-wrap='1. |'
                 data-keystroke='ctrl-o'
-                data-next-line-continuation='orderedList'></button>
+                data-next-line-repeater='orderedList'></button>
 
         <textarea></textarea>
       </div>
@@ -144,8 +144,8 @@ describe('text-editor', () => {
     })
 
     describe('pressing enter', () => {
-      describe('on a line that matches a continuation pattern', () => {
-        describe('that has no custom continuation function', () => {
+      describe('on a line that matches a repeater pattern', () => {
+        describe('that has no custom repeater function', () => {
           beforeEach(() => {
             textarea.value = '- some text content'
             textarea.selectionStart = textarea.value.length
@@ -158,7 +158,7 @@ describe('text-editor', () => {
           })
         })
 
-        describe('that has a continuation function', () => {
+        describe('that has a repeater function', () => {
           beforeEach(() => {
             textarea.value = '1. some text content'
             textarea.selectionStart = textarea.value.length
@@ -166,7 +166,7 @@ describe('text-editor', () => {
             textarea.dispatchEvent(inputEvent('keydown', {keyCode: 13}))
           })
 
-          it('calls the continuation function', () => {
+          it('calls the repeater function', () => {
             expect(textarea.value).to.eql('1. some text content\n2. ')
           })
         })

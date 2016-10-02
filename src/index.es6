@@ -22,9 +22,9 @@ widgets.define('text-editor', (options) => {
     const textarea = el.querySelector('textarea')
     const keystrokes = []
     const wrapButtons = asArray(el.querySelectorAll('[data-wrap]'))
-    const nodesWithContinuation = el.querySelectorAll('[data-next-line-continuation]')
-    const continuations = asArray(nodesWithContinuation).map((n) => {
-      const s = n.getAttribute('data-next-line-continuation')
+    const nodesWithRepeater = el.querySelectorAll('[data-next-line-repeater]')
+    const repeaters = asArray(nodesWithRepeater).map((n) => {
+      const s = n.getAttribute('data-next-line-repeater')
       if (options[s]) {
         return options[s]
       } else {
@@ -34,9 +34,9 @@ widgets.define('text-editor', (options) => {
         ]
       }
     })
-    continuations.push([a => true, a => undefined])
+    repeaters.push([a => true, a => undefined])
 
-    const continuation = when(continuations)
+    const repeater = when(repeaters)
 
     wrapButtons.forEach((button) => {
       const wrap = button.getAttribute('data-wrap')
@@ -71,7 +71,7 @@ widgets.define('text-editor', (options) => {
         }
 
         if (e.keyCode === 13) {
-          checkLineContinuation(e, textarea, continuation)
+          checkLineRepeater(e, textarea, repeater)
         }
       })
     }
@@ -100,9 +100,9 @@ widgets.define('text-editor', (options) => {
   }
 })
 
-function checkLineContinuation (event, textarea, continuation) {
+function checkLineRepeater (event, textarea, repeater) {
   const line = lineAtCursor(textarea)
-  const next = line && continuation(line)
+  const next = line && repeater(line)
 
   if (next) {
     event.preventDefault()
