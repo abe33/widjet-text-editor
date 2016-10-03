@@ -114,6 +114,21 @@ func = (line, index) => String
 
 Iterates over all the lines in `string` and replaces them with the value returned by `func`.
 
+### Custom Repeaters
+
+Repeaters are a bit more complex to setup that wrapper. A repeater is an array containing two functions. The first function is the predicate that is used to determine whether the repeater can be applied to the current line while the second function is used to compute the prefix for the new line.
+
+Let's take the ordered list implmentation provided by the widget as an example:
+
+```js
+repeatOrderedList = [
+  (line) => line.match(/^\d+\. /),
+  (line) => `${parseInt(line.match(/^\d+/)[0], 10) + 1}. `
+]
+```
+
+The first function checks whether the line starts with a number followed by a dot and the second parses the number value of the current bullet then increment it by one and returns it followed by a dot and a space.
+
 ## Markdown Utility
 
 The widget also provides an object that offers implementation for common Markdown constructs such as lists, links and images, or inline styles.
