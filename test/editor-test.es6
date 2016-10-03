@@ -83,6 +83,25 @@ describe('text-editor', () => {
     })
   })
 
+  describe('when there is no controls with Keystrokes', () => {
+    beforeEach(() => {
+      document.body.innerHTML = `
+      <div class='text-editor'>
+        <textarea></textarea>
+      </div>
+      `
+
+      textarea = document.querySelector('textarea')
+      sinon.stub(textarea, 'addEventListener')
+
+      widgets('text-editor', '.text-editor', {on: 'init'})
+    })
+
+    it('does not register a listener for the textarea keydown event', () => {
+      expect(textarea.addEventListener.calledWith('keydown')).not.to.be.ok()
+    })
+  })
+
   describe('when the text editor has the focus', () => {
     beforeEach(() => { textarea.focus() })
 
