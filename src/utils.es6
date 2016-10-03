@@ -28,54 +28,65 @@ export function collectMatches (string, regex) {
 }
 
 export function scanLines (block) {
-  return function (textarea) {
+  return function (textarea, ...args) {
     const lines = textarea.value.split(/\n/)
     let counter = 0
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
-      const result = block({textarea, line, lineIndex: i, charIndex: counter})
+      const result = block({
+        textarea, line, lineIndex: i, charIndex: counter
+      }, ...args)
 
-      if (result) { return result }
+      if (result != null) { return result }
       counter += line.length + 1
     }
   }
 }
 
-export const lineAtCursor = scanLines(({textarea, line, charIndex}) => {
-  const start = textarea.selectionStart
-  if (start > charIndex && start <= charIndex + line.length) {
-    return line
-  }
-})
+export const lineAt = scanLines(({line, charIndex}, index) =>
+  index >= charIndex && index <= charIndex + line.length ? line : undefined
+)
 
-export const lineStartIndexAtCursor = scanLines(({textarea, line, charIndex}) => {
-  const start = textarea.selectionStart
-  if (start > charIndex && start <= charIndex + line.length) {
-    return charIndex
-  }
-})
+export const lineStartIndexAt = scanLines(({line, charIndex}, index) =>
+  index >= charIndex && index <= charIndex + line.length ? charIndex : undefined
+)
 
-export const lineEndIndexAtCursor = scanLines(({textarea, line, charIndex}) => {
-  const start = textarea.selectionStart
-  if (start > charIndex && start <= charIndex + line.length) {
-    return charIndex + line.length - 1
-  }
-})
+export const lineEndIndexAt = scanLines(({line, charIndex}, index) =>
+  index >= charIndex && index <= charIndex + line.length
+    ? charIndex + line.length
+    : undefined
+)
 
-export const wholeLinesAtCursor = (textarea) => {
-  const s = Math.min(lineStartIndexAtCursor(textarea), textarea.selectionStart)
-  const e = Math.max(lineEndIndexAtCursor(textarea), textarea.selectionEnd)
+export const lineAtCursor = (textarea) =>
+  lineAt(textarea, textarea.selectionStart)
+
+export const lineStartIndexAtCursor = (textarea) =>
+  lineStartIndexAt(textarea, textarea.selectionStart)
+
+export const lineEndIndexAtCursor = (textarea) =>
+  lineEndIndexAt(textarea, textarea.selectionStart)
+
+export const wholeLinesContaining = (textarea, start, end = start) => {
+  const s = Math.min(lineStartIndexAt(textarea, start), start)
+  const e = Math.max(lineEndIndexAt(textarea, end), end)
   return [s, e, textarea.value.substring(s, e)]
 }
+
+export const wholeLinesAtCursor = (textarea) =>
+  wholeLinesContaining(textarea, textarea.selectionStart, textarea.selectionEnd)
 
 export const patchLines = (str, block) => str.split('\n').map(block).join('\n')
 
 export default {
+  lineAt,
   lineAtCursor,
-  lineStartIndexAtCursor,
+  lineEndIndexAt,
   lineEndIndexAtCursor,
+  lineStartIndexAt,
+  lineStartIndexAtCursor,
   patchLines,
   scanLines,
-  wholeLinesAtCursor
+  wholeLinesAtCursor,
+  wholeLinesContaining
 }
