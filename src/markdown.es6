@@ -35,7 +35,7 @@ export default {
 
   // Repeaters
   repeatOrderedList: [
-    (line) => line.match(/^\d\. /),
-    (line) => `${parseInt(line.match(/^\d/)[0], 10) + 1}. `
+    (line) => line.match(/^\d+\. /),
+    (line) => `${parseInt(line.match(/^\d+/)[0], 10) + 1}. `
   ]
 }
