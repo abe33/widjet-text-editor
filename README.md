@@ -62,14 +62,22 @@ The `utils` object passed to the wrapper function contains the following functio
 ##### scanLines
 
 ```js
-scanLines = (func) => (textarea) => *
+scanLines = (func) => (textarea, ...args) => *
 // where
-func = ({textarea, line, lineIndex, charIndex}) => *
+func = ({textarea, line, lineIndex, charIndex}, ...args) => *
 ```
 
 The `scanLines` function is used to generate a function that iterates over the lines of the textarea's value. Whenever the `func` function returns a value, that value is returned by the generated function and the scan is stopped.
 
-The `lineAtCursor` and `lineEndIndexAtCursor` are built using this function.
+The `lineAt`, `lineStartIndexAt` and `lineEndIndexAt` functions are built using this function.
+
+##### lineAt
+
+```js
+lineAt = (textarea, charIndex) => String
+```
+
+Returns the whole line content where the char index lies in.
 
 ##### lineAtCursor
 
@@ -79,6 +87,14 @@ lineAtCursor = (textarea) => String
 
 Returns the whole line content where the textarea's `selectionStart` lies in.
 
+##### lineStartIndexAt
+
+```js
+lineStartIndexAt = (textarea, charIndex) => Number
+```
+
+Returns the index of the first char of the line where the char index lies in.
+
 ##### lineStartIndexAtCursor
 
 ```js
@@ -87,6 +103,13 @@ lineStartIndexAtCursor = (textarea) => Number
 
 Returns the index of the first char of the line where the textarea's `selectionStart` lies in.
 
+##### lineEndIndexAt
+
+```js
+lineEndIndexAt = (textarea, charIndex) => Number
+```
+
+Returns the index of the last char of the line where the char index lies in.
 
 ##### lineEndIndexAtCursor
 
@@ -95,6 +118,15 @@ lineEndIndexAtCursor = (textarea) => Number
 ```
 
 Returns the index of the last char of the line where the textarea's `selectionStart` lies in.
+
+##### wholeLinesContaining
+
+```js
+wholeLinesContaining = (textarea, start, end) =>
+  [start:Number, end:Number, String]
+```
+
+Returns the start and end position of the lines spanned by the range specified using `start` and `end` parameters, as well as the text of these lines.
 
 ##### wholeLinesAtCursor
 
