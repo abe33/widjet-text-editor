@@ -39,6 +39,7 @@
     "nyc": "^8.3.0",
     "sinon": "^1.17.4",
     "standard": "^5.4.1",
+    "widjet-test-utils": "^1.0.0",
     "codecov": "^1.0.0"
   },
   "dependencies": {
