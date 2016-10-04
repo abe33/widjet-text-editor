@@ -3,8 +3,8 @@ import jsdom from 'mocha-jsdom'
 import sinon from 'sinon'
 import widgets from 'widjet'
 
-import {click, inputEvent} from './helpers/events'
-import {waitsFor} from './helpers/utils'
+import {click, keydown} from 'widjet-test-utils/events'
+import {waitsFor} from 'widjet-test-utils/async'
 
 import {Markdown} from '../src/index'
 
@@ -108,7 +108,7 @@ describe('text-editor', () => {
     describe('using a key stroke', () => {
       describe('when the textarea selection start and end are intricated', () => {
         beforeEach(() => {
-          textarea.dispatchEvent(inputEvent('keydown', {ctrlKey: true, key: 'b'}))
+          keydown(textarea, {ctrlKey: true, key: 'b'})
         })
 
         it('inserts the corresponding text', () => {
@@ -127,7 +127,7 @@ describe('text-editor', () => {
           textarea.selectionStart = 5
           textarea.selectionEnd = 9
 
-          textarea.dispatchEvent(inputEvent('keydown', {ctrlKey: true, keyCode: 98}))
+          keydown(textarea, {ctrlKey: true, keyCode: 98})
         })
 
         it('wraps the selected text with the data-wrap value', () => {
@@ -148,7 +148,7 @@ describe('text-editor', () => {
           textarea.selectionStart = 5
           textarea.selectionEnd = 9
 
-          textarea.dispatchEvent(inputEvent('keydown', {ctrlKey: true, key: 'u'}))
+          keydown(textarea, {ctrlKey: true, key: 'u'})
 
           return waitsFor('user prompted', () => window.prompt.called)
         })
@@ -164,7 +164,7 @@ describe('text-editor', () => {
           textarea.selectionStart = 5
           textarea.selectionEnd = 9
 
-          textarea.dispatchEvent(inputEvent('keydown', {ctrlKey: true, key: 'r'}))
+          keydown(textarea, {ctrlKey: true, key: 'r'})
         })
 
         it('inserts pipes properly', () => {
@@ -180,7 +180,7 @@ describe('text-editor', () => {
             textarea.value = '- some text content'
             textarea.selectionStart = textarea.value.length
 
-            textarea.dispatchEvent(inputEvent('keydown', {keyCode: 13}))
+            keydown(textarea, {keyCode: 13})
           })
 
           it('reproduces the pattern on the next line', () => {
@@ -193,7 +193,7 @@ describe('text-editor', () => {
             textarea.value = '1. some text content'
             textarea.selectionStart = textarea.value.length
 
-            textarea.dispatchEvent(inputEvent('keydown', {keyCode: 13}))
+            keydown(textarea, {keyCode: 13})
           })
 
           it('calls the repeater function', () => {
@@ -207,7 +207,7 @@ describe('text-editor', () => {
           textarea.value = '\nsome text content'
           textarea.selectionStart = textarea.value.length
 
-          textarea.dispatchEvent(inputEvent('keydown', {keyCode: 13}))
+          keydown(textarea, {keyCode: 13})
         })
 
         it('does not insert anything', () => {
