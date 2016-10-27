@@ -5,6 +5,7 @@ import widgets from 'widjet'
 
 import {click, keydown} from 'widjet-test-utils/events'
 import {waitsFor} from 'widjet-test-utils/async'
+import {setPageContent, getTestRoot} from 'widjet-test-utils/dom'
 
 import {Markdown} from '../src/index'
 
@@ -14,7 +15,7 @@ describe('text-editor', () => {
   let textarea
 
   beforeEach(() => {
-    document.body.innerHTML = `
+    setPageContent(`
       <div class='text-editor'>
         <button data-wrap='**|**'
                 data-keystroke='ctrl-b'></button>
@@ -38,9 +39,9 @@ describe('text-editor', () => {
 
         <textarea></textarea>
       </div>
-    `
+    `)
 
-    textarea = document.querySelector('textarea')
+    textarea = getTestRoot().querySelector('textarea')
 
     widgets('text-editor', '.text-editor', {
       on: 'init',
@@ -54,7 +55,7 @@ describe('text-editor', () => {
 
   describe('clicking on an action button', () => {
     beforeEach(() => {
-      const button = document.querySelector('[data-wrap="**|**"]')
+      const button = getTestRoot().querySelector('[data-wrap="**|**"]')
       click(button)
     })
 
@@ -73,7 +74,7 @@ describe('text-editor', () => {
         textarea.selectionStart = 5
         textarea.selectionEnd = 27
 
-        const button = document.querySelector('[data-wrap="codeBlock"]')
+        const button = getTestRoot().querySelector('[data-wrap="codeBlock"]')
         click(button)
       })
 
@@ -85,13 +86,13 @@ describe('text-editor', () => {
 
   describe('when there is no controls with Keystrokes', () => {
     beforeEach(() => {
-      document.body.innerHTML = `
+      setPageContent(`
       <div class='text-editor'>
         <textarea></textarea>
       </div>
-      `
+      `)
 
-      textarea = document.querySelector('textarea')
+      textarea = getTestRoot().querySelector('textarea')
       sinon.stub(textarea, 'addEventListener')
 
       widgets('text-editor', '.text-editor', {on: 'init'})
@@ -224,7 +225,7 @@ describe('text-editor', () => {
         textarea.selectionStart = 5
         textarea.selectionEnd = 27
 
-        const button = document.querySelector('[data-wrap="blockquote"]')
+        const button = getTestRoot().querySelector('[data-wrap="blockquote"]')
         click(button)
       })
 
@@ -239,7 +240,7 @@ describe('text-editor', () => {
         textarea.selectionStart = 5
         textarea.selectionEnd = 27
 
-        const button = document.querySelector('[data-wrap="unorderedList"]')
+        const button = getTestRoot().querySelector('[data-wrap="unorderedList"]')
         click(button)
       })
 
@@ -254,7 +255,7 @@ describe('text-editor', () => {
         textarea.selectionStart = 5
         textarea.selectionEnd = 27
 
-        const button = document.querySelector('[data-wrap="orderedList"]')
+        const button = getTestRoot().querySelector('[data-wrap="orderedList"]')
         click(button)
       })
 
