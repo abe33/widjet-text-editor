@@ -42,6 +42,7 @@ describe('text-editor', () => {
     `)
 
     textarea = getTestRoot().querySelector('textarea')
+    textarea.selectionStart = textarea.selectionEnd = 0
 
     widgets('text-editor', '.text-editor', {
       on: 'init',
