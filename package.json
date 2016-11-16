@@ -1,6 +1,6 @@
 {
   "name": "widjet-text-editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A widget to edit rich text in a textarea",
   "main": "lib/index.js",
   "jsnext:main": "src/index.es6",
