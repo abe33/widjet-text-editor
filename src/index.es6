@@ -1,5 +1,6 @@
 import widgets from 'widjet'
 import {asArray, when} from 'widjet-utils'
+import {CompositeDisposable, DisposableEvent} from 'widjet-disposables'
 
 import {collectMatches, wrapSelection, lineAtCursor, insertText} from './utils'
 import utils from './utils'
@@ -42,6 +43,8 @@ widgets.define('text-editor', (options) => {
 
     const repeater = when(repeaters)
 
+    const subscriptions = new CompositeDisposable()
+
     wrapButtons.forEach((button) => {
       const wrap = button.getAttribute('data-wrap')
 
@@ -49,7 +52,7 @@ widgets.define('text-editor', (options) => {
         keystrokes.push(KeyStroke.parse(button.getAttribute('data-keystroke'), button))
       }
 
-      button.addEventListener('click', (e) => {
+      subscriptions.add(new DisposableEvent(button, 'click', (e) => {
         textarea.focus()
 
         if (options[wrap]) {
@@ -60,11 +63,11 @@ widgets.define('text-editor', (options) => {
 
         widgets.dispatch(textarea, 'input')
         widgets.dispatch(textarea, 'change')
-      })
+      }))
     })
 
     if (keystrokes.length > 0) {
-      textarea.addEventListener('keydown', (e) => {
+      subscriptions.add(new DisposableEvent(textarea, 'keydown', (e) => {
         const match = keystrokes.filter(ks => ks.matches(e))[0]
 
         if (match) {
@@ -75,8 +78,10 @@ widgets.define('text-editor', (options) => {
         if (e.keyCode === 13) {
           checkLineRepeater(e, textarea, repeater)
         }
-      })
+      }))
     }
+
+    return subscriptions
   }
 
   function defaultWrap (textarea, wrap) {
