@@ -63,6 +63,10 @@ widgets.define('text-editor', (options) => {
 
         widgets.dispatch(textarea, 'input')
         widgets.dispatch(textarea, 'change')
+
+        e.stopImmediatePropagation()
+        e.preventDefault()
+        false
       }))
     })
 
