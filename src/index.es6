@@ -53,6 +53,8 @@ widgets.define('text-editor', (options) => {
       }
 
       subscriptions.add(new DisposableEvent(button, 'click', (e) => {
+        e.preventDefault();
+
         textarea.focus();
 
         if (options[wrap]) {
